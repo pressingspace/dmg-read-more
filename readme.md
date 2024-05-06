@@ -54,9 +54,12 @@ a post had not yet been selected.
 
 ### 3. WP-CLI search results
 
-If 1,000s of posts are returned it can be difficult for users to copy the post IDs from STDOUT.
+If 1,000s of posts are returned it can be difficult for users to copy the post IDs from STDOUT, and to
+easily see the number of results returned and the date range (when no dates are supplied).
 
-Suggested improvements are:
+Improvements to consider are:
 
-- Support pagination arguments such as `--page` and `--per-page` to split the results into smaller groups.
+- Support a `--verbose` argument that adds the query dates, post type and a `Total results: ` line to the output.
+- Support a `--timezone` argument that adjusts the search query to a specified timezone.
 - Support an `--output` argument to save the IDs to a file (without knowing the unix command to achieve this).
+- Support pagination arguments such as `--page` and `--per-page` to split the results into smaller groups.
