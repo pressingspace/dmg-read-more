@@ -1,8 +1,8 @@
 # dmg::media Read More
 
-[Brief][./docs/brief.md]
+[Brief](./docs/brief.md)
 
-Please contact [stu@pressingspace.com][mailto:stu@pressingspace.com] for further discussion.
+Please contact [stu@pressingspace.com](mailto:stu@pressingspace.com) for further discussion.
 
 Kind regards,
 
@@ -37,21 +37,20 @@ The brief states:
 > search for and then choose a published **post**
 
 The search query is currently restricted to searching posts of *the same post type*.
-I determined this would be the most suitable approach to begin with.
+I assumed this would be the most suitable approach to begin with.
 
 If the requirement is to only search Posts then this could be hardcoded to `post`.
 
 If there is a requirement to link *between* post types (e.g. from a `post` to a `page`)
-then this could be achieved by adding a "Post type" selector above the search box.
-
-The selected Post type would determine the `type` query param of the search query.
+then this could be achieved by adding a "Post type" selector above the search box. The
+selected Post type would determine the `type` query param of the search query.
 
 ### 2. Block Placeholder
 
 When the block is first added we could show a `Placeholder` with the post search control in it.
 
 This optimisation would reduce the time required for editors to add this block, and make it clearer that
-a linked post had not been selected.
+a post had not yet been selected.
 
 ### 3. WP-CLI search results
 
@@ -60,5 +59,4 @@ If 1,000s of posts are returned it can be difficult for users to copy the post I
 Suggested improvements are:
 
 - Support pagination arguments such as `--page` and `--per-page` to split the results into smaller groups.
-- Support an `--output` argument to save the IDs to a file.
-- Support a `--format` argument to present the IDs in a format that is easier to read (e.g. CSV with column headers).
+- Support an `--output` argument to save the IDs to a file (without knowing the unix command to achieve this).

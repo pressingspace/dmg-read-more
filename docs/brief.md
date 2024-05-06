@@ -1,9 +1,9 @@
-= Brief =
+# Brief
 
 Create a WordPress plugin with two different features. This plugin can be shared with us via a GitHub repository or Zip
 file.
 
-== A Gutenberg Block ==
+## A Gutenberg Block
 
 Write a Gutenberg block using native WP React tools (no ACF or other plugin dependencies). This block should allow
 editors to search for and then choose a published post to insert into the editor as a stylized anchor link.
@@ -17,7 +17,7 @@ with the words `Read More: `.
 
 Choosing a new post should update the anchor link shown in the editor.
 
-== A WP-CLI Command ==
+## A WP-CLI Command
 
 Create a custom WP-CLI command named like, `dmg-read-more search`
 
