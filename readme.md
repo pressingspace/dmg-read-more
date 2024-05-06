@@ -8,6 +8,24 @@ Kind regards,
 
 Stu
 
+## dmg/read-more block
+
+* docs to follow...
+
+## WP CLI command
+
+Command:
+
+```bash
+wp dmg-read-more search
+```
+
+Command with date params:
+
+```bash
+wp dmg-read-more search --date-before="yesterday" --date-after="yesterday - 1 week"
+```
+
 ## Submission notes
 
 ### 1. Posts search query
