@@ -23,7 +23,7 @@ wp dmg-read-more search
 Command with date params:
 
 ```bash
-wp dmg-read-more search --date-before="yesterday" --date-after="yesterday - 1 week"
+wp dmg-read-more search --date-after="last Monday - 14 days" --date-before="last Monday"
 ```
 
 ## Submission notes

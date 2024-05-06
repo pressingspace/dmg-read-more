@@ -1,8 +1,9 @@
 <?php
 /**
- * WP-CLI commands for dmg/read-more block.
+ * WP-CLI commands for the dmg/read-more block.
  */
-class DMG_ReadMoreCLI extends WP_CLI_Command {
+class DMG_ReadMoreCLI extends WP_CLI_Command
+{
   /**
    * Search for posts containing the dmg/read-more block.
    *
@@ -17,21 +18,15 @@ class DMG_ReadMoreCLI extends WP_CLI_Command {
    */
   function search( $args, $assoc_args ) {
     /**
-     * For performant LIKE queries can we call `wp db query` from our own CLI command?
+     * Initial WP_Query params that we will adjust later with a filter.
      *
-     * Something like this:
-     *
-     * npm run env run cli wp db query 'select id from wp_posts where post_content like "%<!-- wp:dmg/read-more %" AND post_status="publish"'
-     *
-     * Alternatively filter wp_query for our CLI command using
-     * https://developer.wordpress.org/reference/hooks/pre_get_posts/
+     * @todo optimise further because ['post_type' => 'any'] includes 'attachment'
      **/
     $query_params = [
         'post_type' => 'any',
         'post_status' => 'publish',
         'posts_per_page' => -1,
         'orderby' => 'ID',
-        'depth' => 1,
         'order' => 'ASC',
         'fields' => 'ids',
     ];
@@ -46,11 +41,12 @@ class DMG_ReadMoreCLI extends WP_CLI_Command {
         $date_query['after'] = $assoc_args['date-after'];
     }
 
-    if ( empty( $date_query) ) {
-        $date_query['before'] = 'today';
-        $date_query['after']  = 'today - 30 days';
+    if ( empty( $date_query ) ) {
+        $date_query['before'] = 'tomorrow';
+        $date_query['after']  = 'tomorrow - 30 days';
     }
 
+    // @todo Consider limiting date query to a max length e.g. 365 days
     $query_params['date_query'] = $date_query;
 
     /**
@@ -60,20 +56,26 @@ class DMG_ReadMoreCLI extends WP_CLI_Command {
      * e.g. filter wp_query for our CLI command using
      * https://developer.wordpress.org/reference/hooks/pre_get_posts/
      */
-    $query_params['s'] = '<!-- wp:dmg/read-more ';
+    $filterQuery = function( $where, \WP_Query $query ) {
+        global $wpdb;
+        $where .= ' AND (' . esc_sql( $wpdb->posts ) . '.post_content LIKE \'%<!-- wp:dmg/read-more %\')';
+        return $where;
+    };
 
-    // WP_CLI::line( print_r($query_params, 1) );
+    add_filter( 'posts_where', $filterQuery, 10, 2 );
 
-    // @todo Exit with error if date range exceeds 30 days
+    $query = new WP_Query( $query_params );
 
-    $query = new WP_Query($query_params);
+    // WP_CLI::line( $query->request );
+
+    remove_filter( 'posts_where', $filterQuery, 10, 2 );
 
     $post_ids = $query->posts;
 
     // @todo handle query errors
 
-    if (count($post_ids)) {
-        WP_CLI::line( implode(',', $post_ids) );
+    if ( count( $post_ids ) ) {
+        WP_CLI::line( implode( ',', $post_ids ) );
     } else {
         WP_CLI::line( '0 posts found.' );
     }
