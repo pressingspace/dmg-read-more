@@ -1,0 +1,31 @@
+{
+	"name": "dmg-read-more",
+	"version": "0.1.0",
+	"description": "Insert a “Read More” link to another post.",
+	"author": "Pressing Space",
+	"license": "GPL-2.0-or-later",
+	"main": "build/index.js",
+	"scripts": {
+		"build": "wp-scripts build",
+		"format": "wp-scripts format",
+		"lint:css": "wp-scripts lint-style",
+		"lint:js": "wp-scripts lint-js",
+		"packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip",
+		"start": "wp-scripts start",
+		"env": "wp-env"
+	},
+	"devDependencies": {
+		"@types/node": "^20.12.8",
+		"@types/react": "^18.3.1",
+		"@types/react-redux": "^7.1.33",
+		"@types/wordpress__block-editor": "^11.5.14",
+		"@types/wordpress__blocks": "^12.5.14",
+		"@types/wordpress__components": "^23.8.0",
+		"@types/wordpress__edit-post": "^7.5.7",
+		"@wordpress/env": "^9.9.0",
+		"@wordpress/scripts": "^27.8.0",
+		"ts-loader": "^9.5.1",
+		"typescript": "^5.4.5"
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"outDir": "./build",
+		"jsx": "react-jsx",
+		"module": "ESNext",
+		"target": "es2015",
+		"rootDir": "./src",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"strict": true,
+		"allowSyntheticDefaultImports": true,
+		"moduleResolution": "node",
+		"noImplicitAny": false,
+		"resolveJsonModule": true,
+		"skipLibCheck": true
+	}
+}
