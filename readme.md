@@ -1,9 +1,7 @@
 # dmg::media Read More
 
-[![e2e tests](https://github.com/pressingspace/dmg-read-more/actions/workflows/e2e.yml/badge.svg)]
-(https://github.com/pressingspace/dmg-read-more/actions/workflows/e2e.yml)
-[![unit tests](https://github.com/pressingspace/dmg-read-more/actions/workflows/unit.yml/badge.svg)]
-(https://github.com/pressingspace/dmg-read-more/actions/workflows/unit.yml)
+[![e2e tests](https://github.com/pressingspace/dmg-read-more/actions/workflows/e2e.yml/badge.svg)](https://github.com/pressingspace/dmg-read-more/actions/workflows/e2e.yml)
+[![unit tests](https://github.com/pressingspace/dmg-read-more/actions/workflows/unit.yml/badge.svg)](https://github.com/pressingspace/dmg-read-more/actions/workflows/unit.yml)
 
 [Brief](./docs/brief.md)
 
