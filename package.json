@@ -14,12 +14,17 @@
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start": "wp-scripts start",
 		"env": "wp-env",
-        "test:unit": "wp-scripts test-unit-js",
-        "test:unit:help": "wp-scripts test-unit-js --help",
-        "test:unit:watch": "wp-scripts test-unit-js --watch",
-        "test:unit:debug": "wp-scripts --inspect-brk test-unit-js --runInBand --no-cache"
+		"test:e2e": "wp-scripts test-playwright",
+		"test:e2e:headed": "wp-scripts test-playwright --headed",
+		"test:e2e:help": "wp-scripts test-playwright --help",
+		"test:e2e:debug": "wp-scripts test-playwright --debug",
+		"test:unit": "wp-scripts test-unit-js",
+		"test:unit:help": "wp-scripts test-unit-js --help",
+		"test:unit:watch": "wp-scripts test-unit-js --watch",
+		"test:unit:debug": "wp-scripts --inspect-brk test-unit-js --runInBand --no-cache"
 	},
 	"devDependencies": {
+		"@playwright/test": "^1.44.0",
 		"@types/node": "^20.12.8",
 		"@types/react": "^18.3.1",
 		"@types/react-redux": "^7.1.33",

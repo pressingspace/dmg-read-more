@@ -21,11 +21,7 @@ export const useCurrentPostType = () =>
 export const usePost = ( postType, id ) => {
 	return useSelect(
 		( select ) => {
-			return select( 'core' ).getEntityRecord(
-				'postType',
-				postType,
-				id
-			);
+			return select( 'core' ).getEntityRecord( 'postType', postType, id );
 		},
 		[ postType, id ]
 	);
@@ -35,14 +31,12 @@ export const usePost = ( postType, id ) => {
  * Get all posts for a given post type and search query.
  */
 export const usePosts = ( postType, query ) => {
-    return useSelect(
+	return useSelect(
 		( select ) => {
-			return (
-				select( 'core' ).getEntityRecords(
-					'postType',
-					postType,
-					query
-				)
+			return select( 'core' ).getEntityRecords(
+				'postType',
+				postType,
+				query
 			);
 		},
 		[ postType, query ]

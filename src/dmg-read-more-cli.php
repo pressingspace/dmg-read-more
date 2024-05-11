@@ -59,23 +59,22 @@ class DMG_ReadMoreCLI extends WP_CLI_Command
      *
      * Provides an efficient method to query for posts that contain our block.
      */
-    $filterQuery = function( $where, \WP_Query $query ) {
+    $filter_query = function( $where, \WP_Query $query ) {
         global $wpdb;
         $where .= ' AND (' . esc_sql( $wpdb->posts ) . '.post_content LIKE \'%<!-- wp:dmg/read-more %\')';
         return $where;
     };
 
-    add_filter( 'posts_where', $filterQuery, 10, 2 );
+    add_filter( 'posts_where', $filter_query, 10, 2 );
 
     $query = new WP_Query( $query_params );
 
+    // Uncomment to debug the SQL query
     // WP_CLI::line( $query->request );
 
-    remove_filter( 'posts_where', $filterQuery, 10, 2 );
+    remove_filter( 'posts_where', $filter_query, 10, 2 );
 
     $post_ids = $query->posts;
-
-    // @todo handle query errors
 
     if ( count( $post_ids ) ) {
         WP_CLI::line( implode( ',', $post_ids ) );

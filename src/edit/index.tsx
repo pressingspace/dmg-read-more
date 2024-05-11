@@ -50,7 +50,7 @@ export default function edit( { attributes, setAttributes } ) {
 	/**
 	 * Get up to 10 posts to populate the ComboboxControl options.
 	 */
-	let posts = usePosts( currentPostType, {
+	const posts = usePosts( currentPostType, {
 		per_page: 10,
 		exclude: currentPostId,
 		orderby: 'date',

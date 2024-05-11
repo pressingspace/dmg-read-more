@@ -13,10 +13,6 @@
 		"linkedPostId": {
 			"type": "number",
 			"default": 0
-		},
-		"linkedPostType": {
-			"type": "string",
-			"default": "post"
 		}
 	},
 	"selectors": {

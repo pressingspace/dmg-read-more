@@ -26,6 +26,38 @@ Command with date params:
 wp dmg-read-more search --date-after="last Monday - 14 days" --date-before="last Monday"
 ```
 
+## Setting up
+
+```bash
+npm run env start
+```
+
+## Tests
+
+For the purposes of the the technical task I have added some example unit tests.
+
+A production-ready app would have greater test coverage.
+
+### Playwright e2e tests ###
+
+```bash
+npm run test:e2e
+```
+
+### Jest Unit tests ###
+
+```bash
+npm run test:unit
+```
+
+### PHPUnit tests ###
+
+I could not find the time to add PHPUnit tests for this technical task.
+
+Examples of PHPUnit tests I have written can be found in the BeyondWords wordpress plugin repo.
+
+e.g. [PlayerTest](https://github.com/beyondwords-io/wordpress-plugin/blob/main/tests/phpunit/Core/PlayerTest.php), [MetaboxTest](https://github.com/beyondwords-io/wordpress-plugin/blob/main/tests/phpunit/Component/Post/Metabox/MetaboxTest.php).
+
 ## Submission notes
 
 ### 1. Posts search query
