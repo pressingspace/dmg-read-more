@@ -78,8 +78,8 @@ preferable, to provide editors with more flexibility.
 
 The following steps have been taken to keep WP CLI searches fast for large datasets:
 
-1. Search `post_content` for the string `<!-- wp:dmg/read-more `.
-2. Only request the `id` field for the search request.
+1. Only search the `post_content` field for the string `<!-- wp:dmg/read-more `.
+2. Only return the `id` field (primary key) in the search query.
 
 ## Suggested improvements
 
@@ -92,7 +92,8 @@ The brief states:
 The search query is currently restricted to searching posts of *the same post type*.
 I assumed this would be the most suitable approach to begin with.
 
-If the requirement is to only search Posts then this could be hardcoded to `post`.
+If the requirement is to only search *Posts* then we could hardcode the `type` query
+param of the search query to `post`.
 
 If there is a requirement to link *between* post types (e.g. from a `post` to a `page`)
 then this could be achieved by adding a "Post type" selector above the search box. The
@@ -102,8 +103,8 @@ selected Post type would determine the `type` query param of the search query.
 
 When the block is first added we could show a `Placeholder` with the post search control in it.
 
-This optimisation would reduce the time required for editors to add this block, and make it clearer that
-a post had not yet been selected.
+This optimisation would reduce the time required for editors to add this block, and make it clearer
+that a post had not yet been selected when a block has no `linkedPostId` attribute.
 
 ### 3. WP-CLI search results
 
@@ -113,6 +114,5 @@ easily see the number of results returned and the date range (when no dates are 
 Improvements to consider are:
 
 - Support a `--verbose` argument that adds the query dates, post type and a `Total results: ` line to the output.
-- Support a `--timezone` argument that adjusts the search query to a specified timezone.
-- Support an `--output` argument to save the IDs to a file (without knowing the unix command to achieve this).
+- Support an `--output` argument to save the IDs to a file.
 - Support pagination arguments such as `--page` and `--per-page` to split the results into smaller groups.
