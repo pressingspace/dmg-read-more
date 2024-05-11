@@ -1,5 +1,8 @@
 # dmg::media Read More
 
+![e2e tests](https://github.com/pressingspace/dmg-read-more/actions/workflows/e2e.yml/badge.svg)
+![unit tests](https://github.com/pressingspace/dmg-read-more/actions/workflows/unit.yml/badge.svg)
+
 [Brief](./docs/brief.md)
 
 Please contact [stu@pressingspace.com](mailto:stu@pressingspace.com) for further discussion.
