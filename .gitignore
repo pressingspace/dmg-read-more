@@ -5,6 +5,10 @@
 /blob-report/
 /playwright/.cache/
 
+# Build artifacts
+/build
+/*.zip
+
 # Logs
 logs
 *.log
@@ -14,9 +18,6 @@ yarn-error.log*
 
 # Coverage directory used by tools like istanbul
 coverage
-
-# Build directory
-/build
 
 # Dependency directories
 node_modules/

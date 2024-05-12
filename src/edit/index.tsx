@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { sprintf, __, _x } from '@wordpress/i18n';
+import { __, _x } from '@wordpress/i18n';
 import {
 	BlockControls,
 	InspectorControls,
@@ -13,21 +13,17 @@ import {
 	PanelBody,
 	ToolbarGroup,
 	ToolbarButton,
+	Spinner,
 } from '@wordpress/components';
 import { debounce } from '@wordpress/compose';
 import { useState } from '@wordpress/element';
-import { linkOff } from '@wordpress/icons';
+import { link, linkOff } from '@wordpress/icons';
 
 /**
  * Internal dependencies
  */
 import './editor.scss';
-import {
-	useCurrentPostId,
-	useCurrentPostType,
-	usePost,
-	usePosts,
-} from '../hooks';
+import { usePost, usePosts } from '../hooks';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -35,59 +31,50 @@ import {
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  *
+ * @param {Object}   root0
+ * @param {Object}   root0.attributes
+ * @param {number}   root0.attributes.linkedPostId
+ * @param {Function} root0.setAttributes
+ *
  * @return {Element} Element to render.
  */
-export default function edit( { attributes, setAttributes } ) {
-	const { linkedPostId } = attributes;
-
+export default function Edit( {
+	attributes: { linkedPostId },
+	setAttributes,
+} ) {
 	const [ search, setSearch ] = useState( '' );
 
-	const currentPostId = useCurrentPostId();
-	const currentPostType = useCurrentPostType();
-
-	const linkedPost = usePost( currentPostType, linkedPostId );
-
-	/**
-	 * Get up to 10 posts to populate the ComboboxControl options.
-	 */
-	const posts = usePosts( currentPostType, {
-		per_page: 10,
-		exclude: currentPostId,
-		orderby: 'date',
-		order: 'desc',
-		search: search,
-		status: 'publish', // Consider 'publish,future,draft,pending', see /readme.md
-	} );
+	const { record: linkedPost, isResolving: isLinkedPostResolving } =
+		usePost( linkedPostId );
+	const { records: searchedPosts, isResolving: isSearchedPostsResolving } =
+		usePosts( search );
 
 	/**
-	 * @todo
-	 * The currently linked post may not be in the search query results.
-	 * If it isn't then we need to prepend it, so it appears in the options.
+	 * Options for the ComboboxControl.
 	 */
+	const getPostOptions = () => {
+		let posts = searchedPosts ?? [];
 
-	/**
-	 * Construct the options for the ComboboxControl.
-	 */
-	const options = ( posts || [] ).map( ( { id, title } ) => ( {
-		value: String( id ),
-		label: `${ String( title?.rendered ) } (ID: ${ id })`,
-	} ) );
+		// Prefix the linked post if we have one
+		if ( linkedPost ) {
+			posts = [ linkedPost, ...posts ];
+		}
 
-	/**
-	 * Use the options are the default value for the Combobox
-	 */
-	const [ filteredOptions, setFilteredOptions ] = useState( options );
+		return posts.map( ( { id, title } ) => ( {
+			value: `${ id }`,
+			label: `${ title.rendered } (ID: ${ id })`,
+		} ) );
+	};
 
 	/**
 	 * Called when the search control's value changes.
 	 *
-	 * @param {number} value The selected post.
+	 * @param {number} postId The selected post.
 	 */
-	const onSelectPost = ( postId ) => {
+	const onChangePost = ( postId ) => {
 		setAttributes( {
 			linkedPostId: Number( postId ),
 		} );
-		return false;
 	};
 
 	/**
@@ -95,29 +82,35 @@ export default function edit( { attributes, setAttributes } ) {
 	 *
 	 * @param {string} value The current value of the input field.
 	 */
-	const onPostSearch = ( value ) => {
-		setSearch( String( value ).toLowerCase() );
+	const onSearchPost = ( value ) => {
+		setSearch( String( value ).toLowerCase().trim() );
 	};
 
 	/**
 	 * Unlink the selected linked post.
 	 */
-	const unlinkPost = () => {
+	const onUnlinkPost = () => {
 		setAttributes( { linkedPostId: 0 } );
 	};
 
 	const postControls = (
-		<ComboboxControl
-			// __experimentalRenderItem={function noRefCheck(){}}
-			__nextHasNoMarginBottom
-			__next40pxDefaultSize
-			label={ __( 'Post', 'dmg-read-more' ) }
-			options={ options }
-			help="Type to search."
-			value={ String( linkedPostId ) }
-			onFilterValueChange={ debounce( onPostSearch, 300 ) }
-			onChange={ onSelectPost }
-		/>
+		<>
+			<ComboboxControl
+				// __experimentalRenderItem={function noRefCheck(){}}
+				__nextHasNoMarginBottom
+				__next40pxDefaultSize
+				label={ __( 'Post', 'dmg-read-more' ) }
+				options={ getPostOptions() }
+				help={ __( 'Type to search.', 'dmg-read-more' ) }
+				value={ linkedPostId.toString() }
+				onFilterValueChange={ debounce( onSearchPost, 300 ) }
+				onChange={ onChangePost }
+			/>
+			{ isSearchedPostsResolving && (
+				// @ts-expect-error <Spinner /> is used throughout docs & core code
+				<Spinner />
+			) }
+		</>
 	);
 
 	const inspectorControls = (
@@ -129,49 +122,55 @@ export default function edit( { attributes, setAttributes } ) {
 	);
 
 	const toolbarControls = (
-		<BlockControls>
+		<BlockControls group="block">
 			<ToolbarGroup>
-				{ linkedPost && (
-					<ToolbarButton
-						icon={ linkOff }
-						showTooltip
-						label={ __( 'Unlink', 'dmg-read-more' ) }
-						onClick={ unlinkPost }
-					/>
-				) }
+				<ToolbarButton
+					icon={ linkOff }
+					showTooltip
+					label={ __( 'Unlink', 'dmg-read-more' ) }
+					onClick={ onUnlinkPost }
+					onPointerEnterCapture={ undefined }
+					onPointerLeaveCapture={ undefined }
+					placeholder={ undefined }
+				/>
 			</ToolbarGroup>
 		</BlockControls>
 	);
 
-	// @todo consider adding Placeholder
-	// const placeholder = (
-	// 	<Placeholder
-	// 		icon={ more }
-	// 		label={ __( 'Read More [dmg::media]', 'dmg-read-more' ) }
-	// 	>
-	// 		{ postControls }
-	// 	</Placeholder>
-	// );
+	/**
+	 * @todo Consider adding secondary postControls into Placeholder
+	 */
+	const placeholder = (
+		<Placeholder
+			icon={ link }
+			label={ __( 'Read More [dmg::media]', 'dmg-read-more' ) }
+		>
+			<p>{ __( 'Select a post', 'dmg-read-more' ) }</p>
+			{ isLinkedPostResolving && (
+				// @ts-expect-error <Spinner /> is used throughout docs & core code
+				<Spinner />
+			) }
+		</Placeholder>
+	);
 
-	const blockProps = useBlockProps( {
-		className: 'dmg-read-more',
-	} );
+	const blockProps = useBlockProps();
 
-	const linkedPostTitle = linkedPost
-		? String( linkedPost.title.rendered )
-		: '';
+	const isEmpty = linkedPostId === 0;
 
 	return (
 		<>
 			{ inspectorControls }
-			{ toolbarControls }
-			<p { ...blockProps }>
-				{ /* translators: %s is replaced with the link to the post */ }
-				{ sprintf(
-					__( 'Read more: %s', 'dmg-read-more' ),
-					linkedPostTitle
-				) }
-			</p>
+			{ isEmpty && placeholder }
+			{ ! isEmpty && toolbarControls }
+			{ ! isEmpty && (
+				<p { ...blockProps }>
+					{ __( 'Read more', 'dmg-read-more' ) }:&nbsp;
+					{ /*·Simulate a link using a styled span */ }
+					<span className="dmg-load-more dmg-load-more-link">
+						{ String( linkedPost?.title?.rendered ) }
+					</span>
+				</p>
+			) }
 		</>
 	);
 }

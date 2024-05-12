@@ -1,4 +1,5 @@
 <?php
+
 /**
  * WP-CLI commands for the dmg/read-more block.
  */

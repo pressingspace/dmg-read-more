@@ -1,4 +1,25 @@
 <?php
+/**
+ * The brief states:
+ *
+ * > The anchor should be output within a `core/paragraph` block with a HTML
+ * > CSS class of `dmg-read-more` added to it.
+ *
+ * It isn't clear why a `core/paragraph` needs to be used instead of some
+ * standard `<p>...</p>` markup, but it may be because filters have been added
+ * for block rendering, so I have used `parse_blocks` and `render_block` below
+ * to wrap our `<a>` markup with a `core/paragraph` block.
+ *
+ * This should work with filters such as https://developer.wordpress.org/reference/hooks/render_block/
+ * but it may not be what was intended in the brief. If this is not correct
+ * then please clarify.
+ *
+ * If this isn't correct then an alternate approach may include the use of:
+ *
+ * $wrapper_attributes = get_block_wrapper_attributes([
+ *   'class' => 'dmg-read-more',
+ * ]);
+ */
 if (! array_key_exists('linkedPostId', $attributes)) {
 	return;
 }
@@ -10,24 +31,23 @@ if (get_post_status($post) !== 'publish') {
 }
 
 $link = sprintf(
-	'<a href="%s" title="%s">%s</a>',
+	'<a class="dmg-read-more" href="%s" title="%s">%s</a>',
 	get_the_permalink($post),
 	the_title_attribute(['post' => $post, 'echo' => false]),
 	esc_html(get_the_title($post))
 );
 
-$wrapper_attributes = get_block_wrapper_attributes([
-	'class' => 'dmg-read-more',
-]);
+$prefixed_link = sprintf(
+	'%s: %s',
+	__('Read more', 'dmg-read-more'),
+	$link
+);
 
-?>
-<p <?php echo wp_kses_post($wrapper_attributes); ?>>
-	<?php
-	// @todo Post title in <a> link
-	printf(
-		/* translators: %s is replaced with the link to the post */
-		wp_kses_post('Read more: %s', 'dmg-read-more'),
-		$link
-	);
-	?>
-</p>
+$blocks = parse_blocks(
+	sprintf(
+		'<!-- wp:paragraph --><p>%s</p><!-- /wp:paragraph -->',
+		$prefixed_link
+	)
+);
+
+echo render_block($blocks[0]);

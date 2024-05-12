@@ -28,13 +28,14 @@
 		"@types/node": "^20.12.8",
 		"@types/react": "^18.3.1",
 		"@types/react-redux": "^7.1.33",
-		"@types/wordpress__block-editor": "^11.5.14",
-		"@types/wordpress__blocks": "^12.5.14",
-		"@types/wordpress__components": "^23.8.0",
-		"@types/wordpress__edit-post": "^7.5.7",
+		"@wordpress/block-editor": "^12.25.0",
+		"@wordpress/blocks": "^12.34.0",
+		"@wordpress/components": "^27.5.0",
+		"@wordpress/core-data": "^6.34.0",
+		"@wordpress/editor": "^13.34.0",
 		"@wordpress/env": "^9.9.0",
+		"@wordpress/icons": "^9.48.0",
 		"@wordpress/scripts": "^27.8.0",
-		"ts-loader": "^9.5.1",
 		"typescript": "^5.4.5"
 	}
 }

@@ -1,9 +1,12 @@
 /**
  * The following styles get applied inside the editor only.
- *
- * Replace them with your own styles or remove the file completely.
  */
 
-.wp-block-dmg-read-more {
-	// border: 1px dotted #f00;
+ /*
+  * Present the <span> in the editor as a disabled <a>
+  * More styles may be required to do this effectively cross-browser.
+  */
+.wp-block-dmg-read-more span.dmg-load-more-link:hover {
+	cursor: not-allowed;
+	text-decoration: underline;
 }
