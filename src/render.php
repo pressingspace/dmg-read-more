@@ -19,6 +19,9 @@
  * $wrapper_attributes = get_block_wrapper_attributes([
  *   'class' => 'dmg-read-more',
  * ]);
+ *
+ * (The get_block_wrapper_attributes() approach was my first attempt,
+ * before I noticed that the brief was asking for a `core/paragraph` block)
  */
 if (! array_key_exists('linkedPostId', $attributes)) {
 	return;

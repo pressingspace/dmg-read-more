@@ -111,14 +111,7 @@ although WordPress does it's own caching so this may not make a difference.
 This would be one of the first things to check when performance testing against
 a large dataset on a staging environment.
 
-### 3. Add secondary post selector into placeholder
-
-> Editors should be able to search posts in the `InspectorControls`
-
-Adding another post selector into the placeholder would likely reduce the time
-required for editors to add this block into their posts.
-
-### 3. WP-CLI search results
+### 2. WP-CLI search results
 
 > Note that there may be tens of thousands of results.
 
@@ -129,3 +122,10 @@ and a `Total results: ` line to the output.
 - Support an `--output` argument to save the IDs to a file.
 - If performance is still an issue with large datasets then support pagination
 arguments such as `--page` and `--per-page` to split the results into smaller groups.
+
+### 3. Select all the text in the post selector on click
+
+Selecting all text on click/immediately after searching would make it a little easier to
+delete the search term and search again using the keyboard only, but it may annoy some
+users who wish to edit their original term. User feedback/testing could be conducted before
+considering this.
