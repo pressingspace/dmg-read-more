@@ -125,6 +125,7 @@ export default function Edit( {
 					showTooltip
 					label={ __( 'Unlink', 'dmg-read-more' ) }
 					onClick={ () => onSelectPost( 0 ) }
+					disabled={ ! linkedPostId }
 					onPointerEnterCapture={ undefined }
 					onPointerLeaveCapture={ undefined }
 					placeholder={ undefined }
@@ -152,27 +153,35 @@ export default function Edit( {
 
 	const blockProps = useBlockProps();
 
-	if ( ! linkedPostId ) {
-		return <div { ...blockProps }>{ getPlaceholder() }</div>;
+    if (! linkedPostId) {
+		return (
+			<div { ...blockProps }>
+				{ getInspectorControls() }
+				{ getBlockControls() }
+				{ getPlaceholder() }
+			</div>
+		);
 	}
 
 	return (
-		<p { ...blockProps }>
+		<div { ...blockProps }>
 			{ getInspectorControls() }
 			{ getBlockControls() }
-			{ __( 'Read more', 'dmg-read-more' ) }:&nbsp;
-			{ isLinkedPostResolving ? (
-				// @ts-expect-error <Spinner /> is used throughout docs & core code
-				<Spinner />
-			) : (
-				<>
-					{ /*·Simulate a link in block editor using a styled span */ }
-					<span className="dmg-load-more dmg-load-more-link">
-						{ linkedPost?.title?.rendered ?? '' }
-					</span>
-					{ /*·@todo Add a Notice to show an error if post has been deleted */ }
-				</>
-			) }
-		</p>
+			<p>
+				{ __( 'Read more', 'dmg-read-more' ) }:&nbsp;
+				{ isLinkedPostResolving ? (
+					// @ts-expect-error <Spinner /> is used throughout docs & core code
+					<Spinner />
+				) : (
+					<>
+						{ /*·Simulate a link in block editor using a styled span */ }
+						<span className="dmg-load-more dmg-load-more-link">
+							{ linkedPost?.title?.rendered ?? '' }
+						</span>
+						{ /*·@todo Add a Notice to show an error if post has been deleted */ }
+					</>
+				) }
+			</p>
+		</div>
 	);
 }
