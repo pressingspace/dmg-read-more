@@ -57,4 +57,4 @@ $blocks = parse_blocks(
 	)
 );
 
-echo render_block($blocks[0]);
+echo wp_kses_post(render_block($blocks[0]));
