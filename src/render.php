@@ -24,6 +24,10 @@ if (! array_key_exists('linkedPostId', $attributes)) {
 	return;
 }
 
+if (empty($attributes['linkedPostId'])) {
+	return;
+}
+
 $post = get_post($attributes['linkedPostId']);
 
 if (get_post_status($post) !== 'publish') {
