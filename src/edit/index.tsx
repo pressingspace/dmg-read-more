@@ -175,7 +175,7 @@ export default function Edit( {
 				) : (
 					<>
 						{ /*·Simulate a link in block editor using a styled span */ }
-						<span className="dmg-load-more dmg-load-more-link">
+						<span className="dmg-read-more dmg-read-more-link">
 							{ linkedPost?.title?.rendered ?? '' }
 						</span>
 						{ /*·@todo Add a Notice to show an error if post has been deleted */ }

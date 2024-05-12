@@ -24,7 +24,9 @@
 		"test:unit:debug": "wp-scripts --inspect-brk test-unit-js --runInBand --no-cache"
 	},
 	"devDependencies": {
+		"@babel/preset-react": "^7.24.1",
 		"@playwright/test": "^1.44.0",
+		"@testing-library/react": "^15.0.7",
 		"@types/node": "^20.12.8",
 		"@types/react": "^18.3.1",
 		"@types/react-redux": "^7.1.33",
@@ -35,7 +37,10 @@
 		"@wordpress/editor": "^13.34.0",
 		"@wordpress/env": "^9.9.0",
 		"@wordpress/icons": "^9.48.0",
+		"@wordpress/jest-console": "^7.28.0",
+		"@wordpress/jest-preset-default": "^11.28.0",
 		"@wordpress/scripts": "^27.8.0",
+		"resize-observer-polyfill": "^1.5.1",
 		"typescript": "^5.4.5"
 	}
 }

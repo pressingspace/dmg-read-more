@@ -6,7 +6,7 @@
   * Present the <span> in the editor as a disabled <a>
   * More styles may be required to do this effectively cross-browser.
   */
-.wp-block-dmg-read-more span.dmg-load-more-link:hover {
+.wp-block-dmg-read-more span.dmg-read-more-link:hover {
 	cursor: not-allowed;
 	text-decoration: underline;
 }
