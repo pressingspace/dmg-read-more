@@ -11,9 +11,18 @@ Kind regards,
 
 Stu
 
-## dmg/read-more block
+## Quickstart
 
-* Add
+```bash
+npm install
+npm run env start
+npm run start
+```
+
+Visit [localhost:8888](http://localhost:8888/wp-admin).
+
+Username: `admin`
+Password: `password`
 
 ## WP CLI command
 
@@ -29,14 +38,6 @@ Command with date params:
 wp dmg-read-more search --date-after="last Monday - 14 days" --date-before="last Monday"
 ```
 
-## Quickstart
-
-```bash
-npm install
-npm run env start
-npm run start
-```
-
 ## Tests
 
 I have added a few example e2e and unit tests.
@@ -45,11 +46,15 @@ A production-ready app would have greater test coverage.
 
 ### Playwright e2e tests ###
 
+These run fine locally, but more work is required to get them working in GitHub Actions.
+
 ```bash
 npm run test:e2e
 ```
 
 ### Jest Unit tests ###
+
+These work both locally and in GitHub Actions.
 
 ```bash
 npm run test:unit
@@ -84,6 +89,12 @@ written for another plugin can be found in the BeyondWords wordpress plugin repo
 
 e.g. [PlayerTest](https://github.com/beyondwords-io/wordpress-plugin/blob/main/tests/phpunit/Core/PlayerTest.php), [MetaboxTest](https://github.com/beyondwords-io/wordpress-plugin/blob/main/tests/phpunit/Component/Post/Metabox/MetaboxTest.php).
 
+### 4. Plugin ZIP workflow in GitHub Actions
+
+This needs a fix, the `npm run plugin-zip` command is missing some files.
+
+For submission I prepared the ZIP manually instead.
+
 ## Suggested improvements
 
 ### 1. Search other post types
@@ -111,7 +122,7 @@ although WordPress does it's own caching so this may not make a difference.
 This would be one of the first things to check when performance testing against
 a large dataset on a staging environment.
 
-### 2. WP-CLI search results
+### 3. WP-CLI search results
 
 > Note that there may be tens of thousands of results.
 
@@ -123,9 +134,14 @@ and a `Total results: ` line to the output.
 - If performance is still an issue with large datasets then support pagination
 arguments such as `--page` and `--per-page` to split the results into smaller groups.
 
-### 3. Select all the text in the post selector on click
+### 4. Select all the text in the post selector on click
 
 Selecting all text on click/immediately after searching would make it a little easier to
 delete the search term and search again using the keyboard only, but it may annoy some
 users who wish to edit their original term. User feedback/testing could be conducted before
 considering this.
+
+### 5. Improve icons
+
+A few icons have been hastily used this demo - ideally branded custom icons
+would be used for block to help users identify the block.
