@@ -9,13 +9,16 @@ class DMG_ReadMoreCLI extends WP_CLI_Command
    * Search for posts containing the dmg/read-more block.
    *
    * If dates are omitted, the search defaults to the last 30 days.
+   *
+   * Dates are inclusive – the WP_Query date_query["inclusive"] param is `true`.
+   *
    * ## OPTIONS
    *
    * [--date-before]
    * : Date to retrieve posts before. Accepts strtotime()-compatible string.
    *
    * [--date-after]
-   * : Date to retrieve posts after. Accepts strtotime()-compatible string.
+   * : Date to retrieve posts after. Accepts strtotime()-compatible string. Dates are inclusive.
    */
   function search( $args, $assoc_args ) {
     /**
@@ -46,9 +49,11 @@ class DMG_ReadMoreCLI extends WP_CLI_Command
 
     // Fallback to last 30 days (including today)
     if ( empty( $date_query ) ) {
-        $date_query['before'] = 'tomorrow';
-        $date_query['after']  = 'tomorrow - 30 days';
+        $date_query['before']    = 'now';
+        $date_query['after']     = '00:00:00 today - 30 days';
     }
+
+    $date_query['inclusive'] = true;
 
     /**
      * @todo Consider limiting date query to a max length e.g. 365 days
