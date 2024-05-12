@@ -1,4 +1,4 @@
-name: e2e Tests
+name: Plugin ZIP
 on:
     push:
         branches: [main]
