@@ -12,13 +12,13 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig( {
 	timeout: 30_000, // 30s
 	// outputDir: 'artifacts/test-results',
-	globalSetup: require.resolve( './src/test/e2e/config/global-setup' ),
+	// globalSetup: require.resolve( './src/test/e2e/config/global-setup' ),
 	// globalTeardown: require.resolve( './src/test/e2e/config/global-teardown' ),
 	testDir: 'src/test/e2e',
 	forbidOnly: !! process.env.CI,
 	retries: process.env.CI ? 2 : 0,
 	workers: 1,
-	reportSlowTests: null,
+	// reportSlowTests: null,
 	reporter: process.env.CI
 		? [ [ 'github' ], [ 'list' ], [ 'html' ] ]
 		: 'html',

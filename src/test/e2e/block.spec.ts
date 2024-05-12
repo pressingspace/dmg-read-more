@@ -6,7 +6,7 @@ import { test, expect } from '@wordpress/e2e-test-utils-playwright';
 /**
  * Internal dependencies
  */
-import { logIn } from './utils/login';
+import { logIn } from './utils';
 
 test.describe( 'dmg/read-more block', () => {
 	test.beforeEach( async ( { admin, page } ) => {
