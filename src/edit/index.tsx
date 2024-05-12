@@ -50,7 +50,7 @@ export default function Edit( {
 		usePosts( search );
 
 	/**
-	 * Options for the ComboboxControl.
+	 * Options for the post selector.
 	 */
 	const getPostOptions = () => {
 		let posts = searchedPosts ?? [];
@@ -71,9 +71,9 @@ export default function Edit( {
 	 *
 	 * @param {number} postId The selected post.
 	 */
-	const onChangePost = ( postId ) => {
+	const onSelectPost = ( postId: number ) => {
 		setAttributes( {
-			linkedPostId: Number( postId ),
+			linkedPostId: postId,
 		} );
 	};
 
@@ -82,18 +82,11 @@ export default function Edit( {
 	 *
 	 * @param {string} value The current value of the input field.
 	 */
-	const onSearchPost = ( value ) => {
+	const onSearchPosts = ( value ) => {
 		setSearch( String( value ).toLowerCase().trim() );
 	};
 
-	/**
-	 * Unlink the selected linked post.
-	 */
-	const onUnlinkPost = () => {
-		setAttributes( { linkedPostId: 0 } );
-	};
-
-	const postControls = (
+	const getPostSelector = () => (
 		<>
 			<ComboboxControl
 				// __experimentalRenderItem={function noRefCheck(){}}
@@ -103,8 +96,8 @@ export default function Edit( {
 				options={ getPostOptions() }
 				help={ __( 'Type to search.', 'dmg-read-more' ) }
 				value={ linkedPostId.toString() }
-				onFilterValueChange={ debounce( onSearchPost, 300 ) }
-				onChange={ onChangePost }
+				onFilterValueChange={ debounce( onSearchPosts, 300 ) }
+				onChange={ ( value ) => onSelectPost( Number( value ?? 0 ) ) }
 			/>
 			{ isSearchedPostsResolving && (
 				// @ts-expect-error <Spinner /> is used throughout docs & core code
@@ -113,22 +106,25 @@ export default function Edit( {
 		</>
 	);
 
-	const inspectorControls = (
-		<InspectorControls>
+	/**
+	 * A post selector exists in the inspector controls.
+	 */
+	const getInspectorControls = () => (
+		<InspectorControls key="inspector">
 			<PanelBody title={ __( 'Link', 'dmg-read-more' ) }>
-				{ postControls }
+				{ getPostSelector() }
 			</PanelBody>
 		</InspectorControls>
 	);
 
-	const toolbarControls = (
-		<BlockControls group="block">
+	const getBlockControls = () => (
+		<BlockControls>
 			<ToolbarGroup>
 				<ToolbarButton
 					icon={ linkOff }
 					showTooltip
 					label={ __( 'Unlink', 'dmg-read-more' ) }
-					onClick={ onUnlinkPost }
+					onClick={ () => onSelectPost( 0 ) }
 					onPointerEnterCapture={ undefined }
 					onPointerLeaveCapture={ undefined }
 					placeholder={ undefined }
@@ -138,39 +134,45 @@ export default function Edit( {
 	);
 
 	/**
-	 * @todo Consider adding secondary postControls into Placeholder
+	 * A post selector also exists in the placeholder.
 	 */
-	const placeholder = (
+	const getPlaceholder = () => (
 		<Placeholder
+			className="dmg-read-more-placeholder"
 			icon={ link }
 			label={ __( 'Read More [dmg::media]', 'dmg-read-more' ) }
-		>
-			<p>{ __( 'Select a post', 'dmg-read-more' ) }</p>
-			{ isLinkedPostResolving && (
-				// @ts-expect-error <Spinner /> is used throughout docs & core code
-				<Spinner />
+			instructions={ __(
+				'Insert a “Read More” link to another post.',
+				'dmg-read-more'
 			) }
+		>
+			{ getPostSelector() }
 		</Placeholder>
 	);
 
 	const blockProps = useBlockProps();
 
-	const isEmpty = linkedPostId === 0;
+	if ( ! linkedPostId ) {
+		return <div { ...blockProps }>{ getPlaceholder() }</div>;
+	}
 
 	return (
-		<>
-			{ inspectorControls }
-			{ isEmpty && placeholder }
-			{ ! isEmpty && toolbarControls }
-			{ ! isEmpty && (
-				<p { ...blockProps }>
-					{ __( 'Read more', 'dmg-read-more' ) }:&nbsp;
-					{ /*·Simulate a link using a styled span */ }
+		<p { ...blockProps }>
+			{ getInspectorControls() }
+			{ getBlockControls() }
+			{ __( 'Read more', 'dmg-read-more' ) }:&nbsp;
+			{ isLinkedPostResolving ? (
+				// @ts-expect-error <Spinner /> is used throughout docs & core code
+				<Spinner />
+			) : (
+				<>
+					{ /*·Simulate a link in block editor using a styled span */ }
 					<span className="dmg-load-more dmg-load-more-link">
-						{ String( linkedPost?.title?.rendered ) }
+						{ linkedPost?.title?.rendered ?? '' }
 					</span>
-				</p>
+					{ /*·@todo Add a Notice to show an error if post has been deleted */ }
+				</>
 			) }
-		</>
+		</p>
 	);
 }
