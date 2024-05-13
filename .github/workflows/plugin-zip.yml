@@ -26,11 +26,10 @@ jobs:
             - name: Install dependencies
               run: npm run build
 
-            - name: Make tmp plugin directory
-              run: mkdir ${{ vars.WP_ORG_PLUGIN_NAME }}
-              working-directory: /tmp
+            - name: Make dist directory
+              run: mkdir dist
 
-            - name: Copy plugin files to /tmp
+            - name: Copy dist plugin files to ./tmp
               run: |
                   cp -rp \
                     build \
@@ -41,7 +40,7 @@ jobs:
                     /tmp/${{ vars.WP_ORG_PLUGIN_NAME }}
 
             - name: Zip plugin directory
-              run: zip -r ${{ vars.WP_ORG_PLUGIN_NAME }}.zip ${{ vars.WP_ORG_PLUGIN_NAME }}
+              run: zip -r ${{ github.workspace }}/dist/${{ vars.WP_ORG_PLUGIN_NAME }}.zip ${{ vars.WP_ORG_PLUGIN_NAME }}
               working-directory: /tmp
 
             - uses: actions/upload-artifact@v4
@@ -52,7 +51,7 @@ jobs:
 
             - name: gh release upload
               run: gh release upload ${{github.event.release.tag_name}} ${{ vars.WP_ORG_PLUGIN_NAME }}.zip
-              working-directory: /tmp
+              working-directory: ./dist
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               shell: bash
