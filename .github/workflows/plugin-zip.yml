@@ -17,11 +17,7 @@ jobs:
               run: npm ci
             - name: Install dependencies
               run: npm run build
-            - name: Run e2e tests
-              run: npm run plugin-zip
-            - uses: actions/upload-artifact@v4
-              if: always()
-              with:
-                  name: plugin-zip
-                  path: dmg-read-more.zip
-                  retention-days: 30
+            - name: Generate zip
+              uses: 10up/action-wordpress-plugin-build-zip@stable
+              env:
+                SLUG: dmg-read-more
