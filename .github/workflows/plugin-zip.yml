@@ -1,23 +1,58 @@
-name: Plugin ZIP
+name: Release plugin ZIP
+
+# Trigger this workflow on release
 on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
+  release:
+    types: [published]
+
+# Make sure the GITHUB_TOKEN has permission to upload to our releases
+permissions:
+  contents: write
+
 jobs:
     test:
         timeout-minutes: 20
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
+
             - uses: actions/setup-node@v4
               with:
                   node-version: lts/*
+
             - name: Install dependencies
               run: npm ci
+
             - name: Install dependencies
               run: npm run build
-            - name: Generate zip
-              uses: 10up/action-wordpress-plugin-build-zip@stable
+
+            - name: Make tmp plugin directory
+              run: mkdir ${{ vars.WP_ORG_PLUGIN_NAME }}
+              working-directory: /tmp
+
+            - name: Copy plugin files to /tmp
+              run: |
+                  cp -rp \
+                    build \
+                    src \
+                    index.php \
+                    readme.txt \
+                    dmg-read-more.php \
+                    /tmp/${{ vars.WP_ORG_PLUGIN_NAME }}
+
+            - name: Zip plugin directory
+              run: zip -r ${{ vars.WP_ORG_PLUGIN_NAME }}.zip ${{ vars.WP_ORG_PLUGIN_NAME }}
+              working-directory: /tmp
+
+            - uses: actions/upload-artifact@v4
+              with:
+                  name: ${{ vars.WP_ORG_PLUGIN_NAME }}.zip
+                  path: /tmp/${{ vars.WP_ORG_PLUGIN_NAME }}.zip
+                  retention-days: 7
+
+            - name: gh release upload
+              run: gh release upload ${{github.event.release.tag_name}} ${{ vars.WP_ORG_PLUGIN_NAME }}.zip
+              working-directory: /tmp
               env:
-                SLUG: dmg-read-more
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              shell: bash
